@@ -4,6 +4,7 @@
    couchdb.client
    clojure.contrib.json
    [clout.core :as clout]
+   [hiccup.core :as hiccup]
    )
   )
 
@@ -18,13 +19,13 @@
 (defn ^{web/uri (fn [uri] (match-document-route uri))
         } document-html [context]
           (let [docid (get (match-document-route (get-in context [:request :uri])) "docid")]
-            (str
-             (:value ( first (:rows (couchdb.client/view-get "http://localhost:5984/" "sideboard" "pages" "pages"))))
-             "<p>The document id was " docid "</p>"
-             )
+            (hiccup/html
+             [:h1 "Document " docid]
+             [:h2 "Content"]
+             [:p
+              (:value (first (:rows (couchdb.client/view-get "http://localhost:5984/" "sideboard" "pages" "pages"))))])
             )
-  
-)
+          )
 
 (defn ^{web/uri "/pat.html"} pat-html [context]
   "<h1>Hello  - this is the patrick page</h1>")
