@@ -115,6 +115,11 @@ Please see the LICENSE file for a copy of the GNU Affero General Public License.
             <artifactId>clojure-couchdb</artifactId>
             <version>0.2.3</version>
         </dependency>
+       <dependency>
+            <groupId>clout</groupId>
+            <artifactId>clout</artifactId>
+            <version>0.2.0</version>
+        </dependency>
     </dependencies>
 
     <repositories>

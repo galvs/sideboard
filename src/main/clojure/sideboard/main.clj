@@ -8,7 +8,11 @@
   )
 
 (defn webfn-matches-path? [path webfn]
-  (= path (get (meta webfn) web/uri))
+  (let [uri (get (meta webfn) web/uri)]
+    (cond
+     (fn? uri) (not (nil? (uri path)))
+     (string? uri) (= uri path)
+     :otherwise false))
   )
 
 (defn get-first-matching-webfunction-for-path [path]
@@ -37,7 +41,7 @@
                                              :C7 resource-exists?}
                          {:request req})
         webfn (get state :webfunction)
-        body (if (not (nil? webfn)) (webfn))
+        body (if (not (nil? webfn)) (webfn {:status status :request req}))
         ]
     {:status status
      :headers {}

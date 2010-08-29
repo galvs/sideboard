@@ -1,10 +1,31 @@
 (ns sideboard.webfunctions
-  (:require [webfunction.webfunction :as web])
+  (:require
+   [webfunction.webfunction :as web]
+   couchdb.client
+   clojure.contrib.json
+   [clout.core :as clout]
+   )
   )
 
-(defn ^{web/uri "/index.html"} index-html []
-  "<h1>Hello  - this is the index page to sideboard - <a href='pat.html'>click here</a></h1>")
+(def doc-route (clout/route-compile "/docs/:docid"))
 
-(defn ^{web/uri "/pat.html"} pat-html []
+(defn match-document-route [uri]
+  (clout/route-matches doc-route uri)
+  )
+
+(match-document-route "/docs/123")
+
+(defn ^{web/uri (fn [uri] (match-document-route uri))
+        } document-html [context]
+          (let [docid (get (match-document-route (get-in context [:request :uri])) "docid")]
+            (str
+             (:value ( first (:rows (couchdb.client/view-get "http://localhost:5984/" "sideboard" "pages" "pages"))))
+             "<p>The document id was " docid "</p>"
+             )
+            )
+  
+)
+
+(defn ^{web/uri "/pat.html"} pat-html [context]
   "<h1>Hello  - this is the patrick page</h1>")
 
