@@ -42,6 +42,9 @@ Please see the LICENSE file for a copy of the GNU Affero General Public License.
                 <groupId>com.theoryinpractise</groupId>
                 <artifactId>clojure-maven-plugin</artifactId>
                 <version>1.3.1</version>
+                <configuration>
+                  <script>run.clj</script>
+                </configuration>
             </plugin>
         </plugins>
     </build>
