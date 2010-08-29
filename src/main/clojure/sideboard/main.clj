@@ -1,26 +1,26 @@
 (ns sideboard.main
   [:require
    ring.adapter.jetty
-   plugboard.status
-   plugboard.core
-   (webfunction helpers vars)
+   [plugboard.plugboard :as plugboard]
+   [webfunction.webfunction :as web]
+   webfunction.selectors
    sideboard.webfunctions]
   )
 
 (defn webfn-matches-path? [path webfn]
-  (= path (get (meta webfn) webfunction.vars/uri))
+  (= path (get (meta webfn) web/uri))
   )
 
 (defn get-first-matching-webfunction-for-path [path]
-  (first (filter #(webfn-matches-path? path %) (webfunction.helpers/get-web-functions (find-ns 'sideboard.webfunctions))))
+  (first (filter #(webfn-matches-path? path %) (webfunction.selectors/get-web-functions (find-ns 'sideboard.webfunctions))))
   )
 
 (defn grab-path-from-compojure [state]
-  [false (merge {plugboard.core/path (get-in state [:request :uri])} state)]
+  [false (merge {plugboard/path (get-in state [:request :uri])} state)]
   )
 
 (defn resource-exists? [state]
-  (let [path (get state plugboard.core/path)
+  (let [path (get state plugboard/path)
         webfn (get-first-matching-webfunction-for-path path)
         result (not (nil? webfn))
         ]
@@ -33,7 +33,7 @@
   )
 
 (defn get-body [req]
-  (let [[status state] (plugboard.status/get-status-with-state {:B3 grab-path-from-compojure
+  (let [[status state] (plugboard/get-status-with-state {:B3 grab-path-from-compojure
                                              :C7 resource-exists?}
                          {:request req})
         webfn (get state :webfunction)

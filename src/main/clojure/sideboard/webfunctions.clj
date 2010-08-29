@@ -1,10 +1,10 @@
 (ns sideboard.webfunctions
-  (:require webfunction.vars)
+  (:require [webfunction.webfunction :as web])
   )
 
-(defn ^{webfunction.vars/uri "/index.html"} index-html []
+(defn ^{web/uri "/index.html"} index-html []
   "<h1>Hello  - this is the index page to sideboard - <a href='pat.html'>click here</a></h1>")
 
-(defn ^{webfunction.vars/uri "/pat.html"} pat-html []
+(defn ^{web/uri "/pat.html"} pat-html []
   "<h1>Hello  - this is the patrick page</h1>")
 
