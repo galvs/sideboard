@@ -1,8 +1,8 @@
 (ns run
-  (:require [swank.swank :as swank] ring.adapter.jetty main))
+  (:require [swank.swank :as swank] ring.adapter.jetty sideboard.main))
 
 (ring.adapter.jetty/run-jetty
- main/application-handler
+ sideboard.main/application-handler
  {:join? false
   :port 8082}
  )
