@@ -2,6 +2,7 @@
   [:require
    ring.adapter.jetty
    [plugboard.plugboard :as plugboard]
+   [plugboard.configurations :as pc]
    [webfunction.webfunction :as web]
    webfunction.selectors
    sideboard.webfunctions]
@@ -16,7 +17,9 @@
   )
 
 (defn get-first-matching-webfunction-for-path [path]
-  (first (filter #(webfn-matches-path? path %) (webfunction.selectors/get-web-functions (find-ns 'sideboard.webfunctions))))
+  (first (filter #(webfn-matches-path? path %)
+                 (webfunction.selectors/get-web-functions
+                  (find-ns 'sideboard.webfunctions))))
   )
 
 (defn grab-path-from-compojure [state]
@@ -37,8 +40,10 @@
   )
 
 (defn get-body [req]
-  (let [[status state] (plugboard/get-status-with-state {:B3 grab-path-from-compojure
-                                             :C7 resource-exists?}
+  (let [[status state] (plugboard/get-status-with-state
+                         (pc/override-default-decision-map
+                          {:B3 grab-path-from-compojure
+                           :C7 resource-exists?})
                          {:request req})
         webfn (get state :webfunction)
         body (if (not (nil? webfn)) (webfn {:status status :request req}))

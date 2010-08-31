@@ -14,8 +14,6 @@
   (clout/route-matches doc-route uri)
   )
 
-(match-document-route "/docs/123")
-
 (defn ^{web/uri (fn [uri] (match-document-route uri))
         } document-html [context]
           (let [docid (get (match-document-route (get-in context [:request :uri])) "docid")]

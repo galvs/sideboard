@@ -10,8 +10,8 @@
                  [ring/ring-httpcore-adapter "0.2.5"]
                  [ring/ring-jetty-adapter "0.2.5"]
                  [ring/ring-servlet "0.2.5"]
-                 [plugboard "1.0"]
-                 [webfunction "1.0"]
+                 [plugboard "1.1.0"]
+                 [webfunction "1.1.0"]
                  [org.clojars.the-kenny/clojure-couchdb "0.2.3"]
                  ]
 
