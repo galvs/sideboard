@@ -12,7 +12,8 @@
 (defn get-body [req]
   (let [[status state] (plugboard/get-status-with-state
                          (merge pc/default-decision-map
-                                webfunction.plugboards/basic-config
+                                (webfunction.plugboards/basic-config
+                                 (map find-ns ['sideboard.webfunctions]))
                           )
                          {:request req})
         webfn (first (get state webfunction.plugboards/compatible-webfunctions))
@@ -26,5 +27,6 @@
 (defn application-handler [req]
   (get-body req)
   )
+
 
 
