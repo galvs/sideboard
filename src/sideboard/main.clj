@@ -5,47 +5,17 @@
    [plugboard.configurations :as pc]
    [webfunction.webfunction :as web]
    webfunction.selectors
+   webfunction.plugboards
    sideboard.webfunctions]
-  )
-
-(defn webfn-matches-path? [path webfn]
-  (let [uri (get (meta webfn) web/uri)]
-    (cond
-     (fn? uri) (not (nil? (uri path)))
-     (string? uri) (= uri path)
-     :otherwise false))
-  )
-
-(defn get-first-matching-webfunction-for-path [path]
-  (first (filter #(webfn-matches-path? path %)
-                 (webfunction.selectors/get-web-functions
-                  (find-ns 'sideboard.webfunctions))))
-  )
-
-(defn grab-path-from-compojure [state]
-  [false (merge {plugboard/path (get-in state [:request :uri])} state)]
-  )
-
-(defn resource-exists? [state]
-  (let [path (get state plugboard/path)
-        webfn (get-first-matching-webfunction-for-path path)
-        result (not (nil? webfn))
-        ]
-    [result
-     (if result
-       (merge state {:webfunction webfn}) ; TODO: Don't use a pure atom, use a namespaced atom
-       state)
-     ]
-    )
   )
 
 (defn get-body [req]
   (let [[status state] (plugboard/get-status-with-state
-                         (pc/override-default-decision-map
-                          {:B3 grab-path-from-compojure
-                           :C7 resource-exists?})
+                         (merge pc/default-decision-map
+                                webfunction.plugboards/basic-config
+                          )
                          {:request req})
-        webfn (get state :webfunction)
+        webfn (first (get state webfunction.plugboards/compatible-webfunctions))
         body (if (not (nil? webfn)) (webfn {:status status :request req}))
         ]
     {:status status
