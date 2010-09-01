@@ -4,8 +4,7 @@
    [plugboard.plugboard :as plugboard]
    [plugboard.configurations :as pc]
    [webfunction.webfunction :as web]
-   webfunction.selectors
-   webfunction.plugboards
+   (webfunction selectors plugboards headers)
    sideboard.webfunctions]
   )
 
@@ -17,10 +16,11 @@
                           )
                          {:request req})
         webfn (first (get state webfunction.plugboards/compatible-webfunctions))
+        headers (webfunction.headers/get-headers webfn)
         body (if (not (nil? webfn)) (webfn {:status status :request req}))
         ]
     {:status status
-     :headers {}
+     :headers headers
      :body body}
     ))
 

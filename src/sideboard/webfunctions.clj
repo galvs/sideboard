@@ -25,6 +25,8 @@
             )
           )
 
-(defn ^{web/uri "/pat.html"} pat-html [context]
+(defn ^{web/uri "/pat.html"
+        web/content-type "text/html"}
+  pat-html [context]
   "<h1>Hello  - this is the patrick page</h1>")
 
