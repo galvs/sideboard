@@ -1,4 +1,7 @@
 (ns sideboard.webfunctions
+  (:use
+   webfunction.context
+   )
   (:require
    [webfunction.webfunction :as web]
    couchdb.client
@@ -15,8 +18,8 @@
   )
 
 (defn ^{web/uri (fn [uri] (match-document-route uri))
-        } document-html [context]
-          (let [docid (get (match-document-route (get-in context [:request :uri])) "docid")]
+        } document-html []
+          (let [docid (get (match-document-route (get-in *web-context* [:request :uri])) "docid")]
             (hiccup/html
              [:h1 "Document " docid]
              [:h2 "Content"]
@@ -26,7 +29,10 @@
           )
 
 (defn ^{web/uri "/pat.html"
-        web/content-type "text/html"}
-  pat-html [context]
-  "<h1>Hello  - this is the patrick page</h1>")
+        web/content-type "text/html"
+        :title "Index page"}
+  index-html []
+  (hiccup/html
+   [:h1 (get-meta :title)]
+   [:p "Welcome to the site"]))
 
