@@ -12,7 +12,7 @@
   (webfunction.response/get-response
    req
    (merge pc/default-decision-map
-          (webfunction.plugboards/basic-config
+          (webfunction.plugboards/web-function-resources
            (map find-ns ['sideboard.webfunctions]))
           )
    ))
