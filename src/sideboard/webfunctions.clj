@@ -1,9 +1,9 @@
 (ns sideboard.webfunctions
   (:use
-   webfunction.context
+   plugboard.webfunction.context
    )
   (:require
-   [webfunction.webfunction :as web]
+   [plugboard.webfunction.webfunction :as web]
    couchdb.client
    clojure.contrib.json
    [clout.core :as clout]
