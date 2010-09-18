@@ -11,13 +11,13 @@
    )
   )
 
-(def doc-route (clout/route-compile "/docs/:docid"))
+(def doc-route (clout/route-compile "docs/:docid"))
 
 (defn match-document-route [uri]
   (clout/route-matches doc-route uri)
   )
 
-(defn ^{web/uri (fn [uri] (match-document-route uri))
+(defn ^{web/path (fn [path] (match-document-route path))
         } document-html []
           (let [docid (get (match-document-route (get-in *web-context* [:request :uri])) "docid")]
             (hiccup/html
@@ -28,7 +28,7 @@
             )
           )
 
-(defn ^{web/uri "/pat.html"
+(defn ^{web/path "pat.html"
         web/content-type "text/html"
         :title "Index page"}
   index-html []
